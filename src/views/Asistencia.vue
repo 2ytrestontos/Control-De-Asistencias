@@ -8,8 +8,9 @@
     </div>
 
     <p>
-      Horas cursadas por el alumno: {{ horasA }} || Horas actuales del curso:
-      {{ horasActuales }} || horas totales del curso: {{ horasT }}
+      Cantidad de asistencias: {{ count }} || Horas cursadas por el alumno:
+      {{ horasA }} || Horas actuales del curso: {{ horasActuales }} || horas
+      totales del curso: {{ horasT }}
     </p>
 
     <table class="table table-hover">
@@ -52,6 +53,7 @@ export default {
       horasT: null,
       horasA: null,
       horasActuales: null,
+      count: 0,
     };
   },
   methods: {
@@ -70,6 +72,16 @@ export default {
     },
   },
   mounted() {
+    axios
+      .get(
+        "http://" +
+          this.$store.state.ruta +
+          ":3000/asistencias/count/" +
+          this.$route.params.id
+      )
+      .then((response) => {
+        this.count = response.data.count;
+      });
     axios
       .get(
         "http://" +
@@ -155,10 +167,7 @@ export default {
           .catch((error) => console.log(error));
         axios
           .put("http://" + this.$store.state.ruta + ":3000/Alumnos", this.props)
-          .then((response) => {
-            response;
-            // console.log(response);
-          })
+          .then()
           .catch((error) => console.log(error));
       },
     },

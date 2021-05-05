@@ -76,41 +76,43 @@
         <p v-else></p>
       </div>
     </div>
-    <div class="izq">
-      <!-- Registrar Profesor -->
-      <h2>Lista de profesores</h2>
-      <br />
-      <ul class="list-group">
-        <li class="list-group-item" v-for="datos in datos" :key="datos._id">
-          <div v-if="datos.Nombre == $store.state.sesion">
-            <router-link :to="'/Profesor/' + datos._id"
-              ><p class="alert alert-info">{{ datos.Nombre }}</p></router-link
-            >
-          </div>
-          <div v-else>
-            <router-link :to="'/Profesor/' + datos._id"
-              ><p>{{ datos.Nombre }}</p></router-link
-            >
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="der">
-      <h2>Panel De Administracion:</h2>
-      <br />
-      <button
-        class="btn btn-primary"
-        data-toggle="modal"
-        data-target="#Adduser"
-      >
-        Registrar Usuario
-      </button>
-      &nbsp;
-      <router-link to="/Cursos">
-        <button class="btn btn-primary" data-toggle="modal">
-          Modificar Cursos
-        </button>
-      </router-link>
+    <div class="row">
+      <div class="col-8">
+        <!-- Registrar Profesor -->
+        <h2>Lista de profesores</h2>
+        <br />
+        <ul class="list-group">
+          <li class="list-group-item" v-for="datos in datos" :key="datos._id">
+            <div v-if="datos.Nombre == $store.state.sesion">
+              <router-link :to="'/Profesor/' + datos._id"
+                ><p class="alert alert-info">{{ datos.Nombre }}</p></router-link
+              >
+            </div>
+            <div v-else>
+              <router-link :to="'/Profesor/' + datos._id"
+                ><p>{{ datos.Nombre }}</p></router-link
+              >
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="col-4">
+        <h2>Panel Del Profesor:</h2>
+        <br />
+        <div class="row col">
+          <button
+            class="btn btn-primary col"
+            data-toggle="modal"
+            data-target="#Adduser"
+          >
+            Registrar Usuario
+          </button>
+          &nbsp;
+          <button class="btn btn-primary col" v-on:click="redirect()">
+            Modificar Cursos
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div v-else>
@@ -142,6 +144,9 @@ export default {
       });
   },
   methods: {
+    redirect() {
+      this.$router.push({ name: "CursosT" });
+    },
     cargarProfesores(datos) {
       var usuario = this.$store.state.sesion;
       var arr = [];

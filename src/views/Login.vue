@@ -52,9 +52,7 @@ export default {
         axios
           .post("http://" + this.$store.state.ruta + ":3000/login", this.props)
           .then((response) => {
-            console.log(response);
             if (response.data.usuario.length > 0) {
-              console.log(response.data.usuario[0]._id);
               if (response.data.tipo == "Profesor") {
                 this.$router.push("/");
               } else {
@@ -70,7 +68,7 @@ export default {
               this.error = "Usuario / contraseña incorrectos";
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => error);
       }
     },
   },

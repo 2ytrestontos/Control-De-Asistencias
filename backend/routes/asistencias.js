@@ -48,7 +48,7 @@ router.get("/:id", (req, res) => {
       res.send(response);
     })
     .catch((err) => {
-      console.log(err);
+      err;
     });
 });
 
@@ -82,7 +82,7 @@ router.get("/modificar/asistencia/:id", (req, res) => {
     .then((response) => {
       res.send(response);
     })
-    .catch(error => console.log(error))
+    .catch(error =>error)
 });
 
 router.put("/modificar/:id", (req, res) => {
@@ -104,4 +104,10 @@ router.put("/modificar/:id", (req, res) => {
       res.send("Error");
     });
 });
+router.get('/count/:id', async (req,res) => {
+  asistencias.countDocuments({"id-alumno": req.params.id})
+    .then(doc => {
+      res.send({count: doc})
+    })
+})
 module.exports = router;

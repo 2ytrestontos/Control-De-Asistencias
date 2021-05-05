@@ -1,26 +1,26 @@
 <template>
-  <div v-if="$store.state.tipo == 'Profesor'">
-    <infoAlmi></infoAlmi>
-  </div>
-  <div v-else>
-    <infoAlmi></infoAlmi>
-  </div>
+  <InfoAlmi></InfoAlmi>
   <NavBar></NavBar>
   <Header></Header>
   <router-view />
+  <br>
+  <br><br>
+  <Footer></Footer>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
 import NavBar from "@/components/NavBar.vue";
-import infoAlmi from "@/components/info.vue";
+import InfoAlmi from "@/components/info.vue";
+import Footer from "@/components/footer.vue";
 
 export default {
   methods: {},
   components: {
     Header,
     NavBar,
-    infoAlmi,
+    InfoAlmi,
+    Footer,
   },
 };
 </script>
@@ -55,5 +55,6 @@ element {
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
   -ms-overflow-style: none; /* IE and Edge */
+  background-color: #1d1d1d;
 }
 </style>
