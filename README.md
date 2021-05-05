@@ -8,6 +8,8 @@ npm install
 ### Compiles and hot-reloads for development
 ```
 npm run serve
+&&
+npm run back
 ```
 
 ### Compiles and minifies for production
