@@ -1,6 +1,3 @@
-// Esto es una prueba
-
-
 <template>
   <div v-if="$store.state.sesion">
     <h2>Asistencias de {{ nombre }}</h2>
