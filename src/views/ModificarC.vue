@@ -2,10 +2,18 @@
   <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'">
     <div>
       <div>
-        <h2>
-          Modificar Datos del Curso:
-          {{ input.grado + " / " + input.nombre }}
-        </h2>
+        <div class="row">
+          <i
+            class="fas fa-arrow-left col-1"
+            style="font-size: 1.5rem"
+            v-on:click="back()"
+          ></i>
+          <h2 class="col-9">
+            Modificar Datos del Curso: {{ input.grado }} / {{ input.nombre }}
+          </h2>
+          <h6 class="col-2">Alumnos {{ cant }}</h6>
+        </div>
+
         <div class="form-row">
           <div class="col-6">
             <label for="">Fecha de Inicio del curso</label>
@@ -32,6 +40,7 @@
         <button class="btn btn-danger" v-on:click="delyear()">
           Eliminar Curso
         </button>
+        &nbsp;
         <button class="btn btn-primary" v-on:click="modificar()">
           Modificar Datos
         </button>
@@ -55,6 +64,7 @@ export default {
   data() {
     return {
       datos: null,
+      cant: null,
       input: {
         grado: null,
         nombre: null,
@@ -68,6 +78,9 @@ export default {
     };
   },
   methods: {
+    back() {
+      this.$router.go(-1);
+    },
     modificar() {
       if (
         this.input.fechainicio != "" &&
@@ -137,9 +150,48 @@ export default {
         this.input.fechafin = response.data[0].fin;
         this.input.horaE = response.data[0].curso["Hora-entrada"];
         this.input.horaS = response.data[0].curso["Hora-salida"];
+        axios
+          .get(
+            "http://" +
+              this.$store.state.ruta +
+              ":3000/cursos/count/" +
+              this.$route.params.nombre
+          )
+          .then((response) => (this.cant = response.data.count));
       })
       .catch((error) => console.log(error));
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+i {
+  color: #36bcdf;
+}
+input[type="date"].form-control,
+input[type="datetime-local"].form-control,
+input[type="month"].form-control,
+input[type="time"].form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 1%;
+  padding: 2%;
+}
+
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+  margin-left: 1.5%;
+}
+
+input[type="date"].form-control[data-v-0eefcbd3],
+input[type="datetime-local"].form-control[data-v-0eefcbd3],
+input[type="month"].form-control[data-v-0eefcbd3],
+input[type="time"].form-control[data-v-0eefcbd3] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 1%;
+  padding: 2%;
+  cursor: pointer;
+}
+</style>

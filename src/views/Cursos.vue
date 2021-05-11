@@ -1,6 +1,6 @@
 <template>
   <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'">
-    <h2>Este es el curso {{ $route.params.nombre }}</h2>
+    <h2>Grado - {{ $route.params.nombre.toUpperCase() }}</h2>
 
     <table class="table table-hover">
       <thead>

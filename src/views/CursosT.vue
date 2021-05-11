@@ -210,9 +210,10 @@
       </div>
     </div>
     <!-- fin modal addgrado -->
+
     <h2><u> Cursos De Almi:</u></h2>
     <div class="row col">
-      <div class="col-6" v-for="datos in datos" :key="datos._id">
+      <div class="col-6" v-for="datos in datos" :key="datos">
         <div class="card bg-primary">
           <div class="card-body row">
             <button class="col btn" v-on:click="delgrado(datos.grado)">
@@ -234,14 +235,14 @@
             <div class="col btn" v-else></div>
           </div>
           <ul class="list-group list-group-flush">
-            <li
-              class="list-group-item btn"
+            <router-link
+              :to="'/Cursos/' + anios"
               v-for="anios in datos.anios"
               :key="anios._id"
-              v-on:click="redirect(anios)"
+              ><li class="list-group-item btn">
+                {{ anios.toUpperCase() }}
+              </li></router-link
             >
-              {{ anios }}
-            </li>
           </ul>
         </div>
         <br />
@@ -294,8 +295,8 @@ export default {
       axios
         .get("http://" + this.$store.state.ruta + ":3000/cursos")
         .then((response) => {
+          this.datos = [];
           for (let i = 0; i < response.data.length; i++) {
-            this.datos = [];
             axios
               .get(
                 "http://" +
@@ -305,27 +306,27 @@ export default {
               )
               .then((anio) => {
                 if (anio.data.length == 1) {
-                  this.datos.push({
+                  this.datos[i] = {
                     grado: response.data[i],
                     anios: [anio.data[0].curso.Nombre],
-                  });
+                  };
                 } else {
-                  this.datos.push({
+                  this.datos[i] = {
                     grado: response.data[i],
                     anios: [
                       anio.data[0].curso.Nombre,
                       anio.data[1].curso.Nombre,
                     ],
-                  });
+                  };
                 }
               })
               .catch((error) => console.log(error));
           }
         });
-    },
+    } /*
     redirect(dato) {
       this.$router.push({ name: "ModificarC", params: { nombre: dato } });
-    },
+    },*/,
     addyear() {
       this.input.A = this.input.Grado + "2";
       if (

@@ -28,24 +28,24 @@
             <form>
               <div class="form-group"></div>
               <div class="form-group">
-                <label for="nombre" class="col-form-label"
-                  >Nombre Del Profesor</label
-                >
+                <!--<label for="nombre" class="col-form-label">Nombre del Profesor</label> -->
                 <input
                   type="text"
                   v-model="input.usuario"
                   class="form-control"
                   id="nombre"
+                  placeholder="Nombre del profesor"
                 />
               </div>
 
               <div class="form-group">
-                <label for="pass" class="col-form-label">Contraseña</label>
+                <!-- <label for="pass" class="col-form-label">Contraseña</label> -->
                 <input
                   type="password"
                   v-model="input.pass"
                   class="form-control"
                   id="pass"
+                  placeholder="Contraseña"
                 />
               </div>
             </form>
@@ -76,48 +76,47 @@
         <p v-else></p>
       </div>
     </div>
-    <div class="row">
-      <div class="col-8">
-        <!-- Registrar Profesor -->
-        <h2>Lista de profesores</h2>
-        <br />
-        <ul class="list-group">
-          <li class="list-group-item" v-for="datos in datos" :key="datos._id">
-            <div v-if="datos.Nombre == $store.state.sesion">
-              <router-link :to="'/Profesor/' + datos._id"
-                ><p class="alert alert-info">{{ datos.Nombre }}</p></router-link
-              >
-            </div>
-            <div v-else>
-              <router-link :to="'/Profesor/' + datos._id"
-                ><p>{{ datos.Nombre }}</p></router-link
-              >
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="col-4">
-        <h2>Panel Del Profesor:</h2>
-        <br />
-        <div class="row col">
-          <button
-            class="btn btn-primary col"
-            data-toggle="modal"
-            data-target="#Adduser"
-          >
-            Registrar Usuario
-          </button>
-          &nbsp;
-          <button class="btn btn-primary col" v-on:click="redirect()">
-            Modificar Cursos
-          </button>
-        </div>
-      </div>
+    <div class="izq">
+      <!-- Registrar Profesor -->
+      <h2>Lista de profesores:</h2>
+      <br />
+      <ul class="list-group" scroll="no">
+        <li
+          class="list-group-item m-0"
+          v-for="datos in datos"
+          :key="datos._id"
+          v-on:click="redirect(datos._id)"
+        >
+          {{ datos.Nombre }}
+        </li>
+      </ul>
+      <p v-if="exito1 != null" class="alert alert-success" role="alert">
+        {{ exito1 }}
+      </p>
+      <p v-else></p>
+    </div>
+    <div class="der">
+      <h2>Panel de Administracion:</h2>
+      <br />
+      <button
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#Adduser"
+      >
+        Registrar Usuario
+      </button>
+      &nbsp;
+      <router-link to="/Cursos">
+        <button class="btn btn-primary">Modificar Cursos</button>
+      </router-link>
     </div>
   </div>
   <div v-else>
     {{ $store.dispatch("clear") }}
   </div>
+  <!--<footer >
+      Copyright&copy; 2021 - Página creada por Jon Aloxi, Xabi y Tiago de Sousa - Todos los derechos reservados
+  </footer>-->
 </template>
 <script>
 import axios from "axios";
@@ -132,7 +131,8 @@ export default {
       },
       datos: null,
       error: null,
-      exito: this.$route.params.exito,
+      exito: null,
+      exito1: this.$route.params.exito,
       cursos: null,
     };
   },
@@ -144,8 +144,14 @@ export default {
       });
   },
   methods: {
-    redirect() {
-      this.$router.push({ name: "CursosT" });
+    clear() {
+      this.error = null;
+      this.exito = null;
+      this.exito1 = null;
+    },
+    redirect(id) {
+      this.clear();
+      this.$router.push("/Profesor/" + id);
     },
     cargarProfesores(datos) {
       var usuario = this.$store.state.sesion;
@@ -167,7 +173,7 @@ export default {
       }
     },
     registro() {
-      (this.error = null), (this.exito = null);
+      this.clear();
       this.props = { usuario: this.input.usuario, pass: this.input.pass };
       if (this.input.usuario != "" && this.input.pass != "") {
         axios
@@ -200,6 +206,7 @@ export default {
 <style scoped>
 .izq {
   width: 65%;
+  height: 200px;
   float: left;
 }
 .der {
@@ -209,4 +216,55 @@ export default {
 p {
   margin: 0px;
 }
+
+/*Recuadro lista profesores*/
+.izq[data-v-fae5bece] {
+  width: 61%;
+  float: left;
+  margin: 2%;
+}
+
+/*Lista de profesores*/
+.list-group-item {
+  cursor: pointer;
+  margin: 0.5%;
+  background-color: transparent;
+  transition: background-color 0.5s ease-out;
+}
+.izq li:first-child {
+  background-color: #d1ecf1;
+}
+.izq ul {
+  height: 100%;
+  overflow-y: scroll;
+}
+/* ::-webkit-scrollbar {
+   display: none; 
+   display: block;
+  width: 20px;
+}   */
+.list-group-item:hover {
+  /* border: 0.5px solid #36bcdf; */
+  /* transition: 1s all ease-in;
+  font-size: 1.1 rem; */
+  transition: 0.5s all ease;
+  background-color: gray;
+}
+/*Panel de Administracion*/
+.der[data-v-fae5bece] {
+  float: left;
+  width: 35%;
+  margin-top: 2%;
+}
+
+/*footer {
+  min-height: 70%;
+  width: 100%;
+  position: relative;
+  clear: both;
+  margin-top: 0px;
+  padding-top: 0px;
+  overflow: visible;
+}
+*/
 </style>
