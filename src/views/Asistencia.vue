@@ -1,6 +1,6 @@
 <template>
   <div v-if="$store.state.sesion">
-    <h2>Asistencias de {{ nombre }}</h2>
+    <h2 v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'"> Asistencias - {{ nombre }}</h2>
     <div class="d-flex justify-content-center">
       <p id="porc" v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
         {{ porc }}% de Faltas
@@ -8,9 +8,8 @@
     </div>
 
     <p>
-      Cantidad de asistencias: {{ count }} || Horas cursadas por el alumno:
-      {{ horasA }} || Horas actuales del curso: {{ horasActuales }} || horas
-      totales del curso: {{ horasT }}
+      Horas cursadas por el alumno: {{ horasA }} || Horas actuales del curso:
+      {{ horasActuales }} || horas totales del curso: {{ horasT }}
     </p>
 
     <table class="table table-hover">
@@ -18,11 +17,11 @@
         <tr>
           <th scope="col">Fecha Entrada</th>
           <th scope="col">Fecha Salida</th>
-          <th scope="col">Falta</th>
+          <th scope="col">Asistencia</th>
         </tr>
       </thead>
       <tbody>
-        <tr
+        <tr class="linea"
           v-for="datos in datos"
           :key="datos._id"
           v-on:click="redirect(datos._id)"
@@ -53,7 +52,6 @@ export default {
       horasT: null,
       horasA: null,
       horasActuales: null,
-      count: 0,
     };
   },
   methods: {
@@ -72,16 +70,6 @@ export default {
     },
   },
   mounted() {
-    axios
-      .get(
-        "http://" +
-          this.$store.state.ruta +
-          ":3000/asistencias/count/" +
-          this.$route.params.id
-      )
-      .then((response) => {
-        this.count = response.data.count;
-      });
     axios
       .get(
         "http://" +
@@ -167,7 +155,10 @@ export default {
           .catch((error) => console.log(error));
         axios
           .put("http://" + this.$store.state.ruta + ":3000/Alumnos", this.props)
-          .then()
+          .then((response) => {
+            response;
+            // console.log(response);
+          })
           .catch((error) => console.log(error));
       },
     },
@@ -176,14 +167,22 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-  background-color: red;
+h2ssad {
+  background-color: rgba(33, 199, 60, 0.425);
 }
 td {
   cursor: pointer;
 }
 div p#porc {
-  width: 145px;
-  border-radius: 15px;
+ width: 145px;
+ border-radius: 15px;
 }
+
+.linea:hover {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+    background-color: #36bcdf;
+}
+
 </style>

@@ -8,7 +8,7 @@
   >
     <h2>Editar Profesor: {{ nombre }}</h2>
     <div class="form-group row">
-      <label for="inputEmail3" class="col-sm-2 col-form-label">Nombre</label>
+      <!--<label for="inputEmail3" class="col-sm-2 col-form-label">Nombre</label>-->
       <div class="col-sm-10">
         <input
           v-model="input.usuario"
@@ -20,16 +20,14 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="inputPassword3" class="col-sm-2 col-form-label"
-        >Contraseña</label
-      >
+       <!--<label for="inputPassword3" class="col-sm-2 col-form-label">Contraseña</label-->
       <div class="col-sm-10">
         <input
           v-model="input.pass"
           type="password"
           class="form-control"
           id="inputPassword3"
-          placeholder="*****"
+          placeholder="Contraseña"
         />
       </div>
     </div>
@@ -168,4 +166,24 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+
+/*Input*/
+.form-control {
+  background-color: aliceblue;
+  outline: none;
+  padding: 22px;
+  display: block;
+  width: 30%;
+  border-radius: 3px;
+  border: 1px solid #9C9B9B;
+  margin: 20px auto;
+  margin-left: 45%;
+}
+/*Botones*/
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+    margin: 1%;
+}
+
+</style>

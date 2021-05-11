@@ -1,8 +1,8 @@
 <template>
   <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'">
-    <div v-if="this.$route.params.nombre != null">
+    <div v-if="$route.params.nombre != null">
       <h2>
-        Modificar Asistencia de:
+        Modificar Asistencia:
         <router-link :to="'/asistencias/' + $route.params.idalumno">{{
           alumno
         }}</router-link>
@@ -56,13 +56,6 @@
       <button class="btn btn-primary" v-on:click="modificar()">
         Modificar
       </button>
-      <p v-if="error != null" class="alert alert-danger" role="alert">
-        {{ error }}
-      </p>
-      <p v-if="exito != null" class="alert alert-success" role="alert">
-        {{ exito }}
-      </p>
-      <p v-else></p>
     </div>
     <div v-else>
       {{ $router.push({ name: "Home" }) }}
@@ -83,8 +76,6 @@ export default {
       salidaH: null,
       alumno: this.$route.params.nombre,
       misterio: null,
-      exito: null,
-      error: null,
     };
   },
 
@@ -95,27 +86,23 @@ export default {
         salida: this.salida + ":00.000+00:00",
         misterio: this.misterio,
       }),
-        (this.error = null),
-        (this.exito = null);
-      axios
-        .put(
-          "http://" +
-            this.$store.state.ruta +
-            ":3000/asistencias/modificar/" +
-            this.$route.params.id,
-          this.props
-        )
-        .then((response) => {
-          if (response.data == "Asistencia Modificada") {
-            this.$router.push({
-              name: "Asistencia",
-              params: { id: this.$route.params.idalumno },
-            });
-          } else {
-            this.error = response.data;
-          }
-        })
-        .catch((error) => console.log(error));
+        axios
+          .put(
+            "http://" +
+              this.$store.state.ruta +
+              ":3000/asistencias/modificar/" +
+              this.$route.params.id,
+            this.props
+          )
+          .then((response) => {
+            if (response.data == "Asistencia Modificada") {
+              this.$router.push({
+                name: "Asistencia",
+                params: { id: this.$route.params.idalumno },
+              });
+            }
+          })
+          .catch((error) => console.log(error));
     },
   },
   mounted() {
@@ -135,4 +122,15 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+a {
+  color: #36bcdf;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+a:hover {
+  color: #36bcdf;
+  background-color: transparent;
+}
+</style>

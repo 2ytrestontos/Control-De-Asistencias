@@ -1,6 +1,8 @@
 <template>
+
   <div>
-    <img src="../assets/almi.png" alt="" />
+    <a href="https://almi.eus/wp-content/uploads/2018/06/logo-Almi.jpg"> <img class="almi" src="https://almi.eus/wp-content/uploads/2018/06/logo-Almi.jpg" alt="Almi"/></a>
+
   </div>
 </template>
 
@@ -11,7 +13,14 @@ export default {
 </script>
 
 <style scoped>
-img {
-  width: 150px;
+.almi {
+  margin: 5px;
+  width: 135px;
+  opacity: 0.9;
 }
+
+.almi:hover {
+  opacity: 1;
+}
+
 </style>

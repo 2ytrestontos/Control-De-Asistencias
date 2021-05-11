@@ -1,5 +1,5 @@
 <template>
-  <div class="header">app de Asistencia Almi</div>
+  <div class="header"></div>
 </template>
 
 <script>
@@ -10,6 +10,7 @@ export default {
 
 <style scoped>
 .header {
+  height: 7px;
   background-color: #36bcdf;
 }
 i {

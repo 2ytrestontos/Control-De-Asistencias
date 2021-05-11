@@ -62,6 +62,13 @@ router.get("/datos/:nombre", async (req, res) => {
     .then(alumno => res.send(alumno))
     .catch(error => console.log(error))
 });
+router.get("/count/:nombre", async (req, res) => {
+  await alumnos.countDocuments({ 'curso.Nombre': req.params.nombre, 'Alumno.Nombre': { $ne: 'test' } })
+    .then(doc => res.send({ count: doc }))
+})
+
+
+
 router.put("/modificar/datos/:nombre", async (req, res) => {
   console.log(req.body);
   await alumnos
