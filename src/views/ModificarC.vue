@@ -186,7 +186,9 @@ export default {
                 for (var i = 0; i < doc.data.length + 1; i++) {
                   var u = i + 1;
                   this.profesores[u] = doc.data[i].Nombre;
+                  this.profesores[doc.data.length+1] = "No Tiene"
                 }
+                
               });
           }
         });
