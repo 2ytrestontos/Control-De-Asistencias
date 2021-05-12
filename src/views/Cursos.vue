@@ -154,5 +154,6 @@ tbody tr {
 tbody tr:hover {
   transition: 0.5s all ease;
   background-color: gray;
+  color: white
 }
 </style>

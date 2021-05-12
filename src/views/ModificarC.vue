@@ -44,7 +44,6 @@
           class="form-control col"
           v-model="input.tutor"
         >
-          <option value="No Tiene">No Tiene</option>
           <option v-for="profesores in profesores" :key="profesores">
             {{ profesores }}
           </option>
@@ -159,7 +158,6 @@ export default {
         )
         .then((response) => {
           if (response.data.length < 1) {
-            this.input.tutor = "no tiene";
             axios
               .get(
                 "http://" +
@@ -168,8 +166,10 @@ export default {
                   null
               )
               .then((doc) => {
+                this.profesores[0] = 'No Tiene';
+                this.input.tutor = 'No Tiene';
                 for (var i = 0; i < doc.data.length; i++) {
-                  this.profesores[i] = doc.data[i].Nombre;
+                  this.profesores[i+1] = doc.data[i].Nombre;
                 }
               });
           } else {
@@ -186,7 +186,9 @@ export default {
                 for (var i = 0; i < doc.data.length + 1; i++) {
                   var u = i + 1;
                   this.profesores[u] = doc.data[i].Nombre;
+                  this.profesores[doc.data.length+1] = "No Tiene"
                 }
+                
               });
           }
         });
