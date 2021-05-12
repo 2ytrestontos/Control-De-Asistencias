@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const alumnos = require("../models/alumnos");
+const usuarios = require("../models/usuarios");
 
 router.get("/", async (req, res) => {
   await alumnos.distinct("curso.grado")
@@ -66,6 +67,60 @@ router.get("/count/:nombre", async (req, res) => {
   await alumnos.countDocuments({ 'curso.Nombre': req.params.nombre, 'Alumno.Nombre': { $ne: 'test' } })
     .then(doc => res.send({ count: doc }))
 })
+router.get("/tutor/:curso", async (req, res) => {
+  usuarios.find({ 'tutoria': req.params.curso })
+    .then(doc => {
+      res.send(doc)
+    })
+})
+router.get("/profesores/:tutor", async (req, res) => {
+  if (req.params.tutor == null) {
+    usuarios.find({})
+      .then(doc => {
+        res.send(doc)
+      })
+  } else {
+    usuarios.find({ Nombre: { $ne: req.params.tutor } })
+      .then(doc => {
+        res.send(doc)
+      })
+  }
+
+})
+
+router.get('/dia/:curso', async (req, res) => {
+  console.log(req.params.curso)
+  await alumnos.aggregate([
+    {
+      '$lookup': {
+        'from': 'Asistencias',
+        'localField': '_id',
+        'foreignField': 'id-alumno',
+        'as': 'test'
+      }
+    }, {
+      '$match': {
+        'Alumno.Nombre': {
+          $ne: 'test'
+        },
+        'curso.Nombre': req.params.curso,
+        'test.fecha-entrada': {
+          '$not': {
+            '$gte': new Date()
+          }
+        }
+      }
+    }, {
+      '$project': {
+        'id-alumno': 1
+      }
+    }
+  ]).then(response => {
+    console.log(response)
+    res.send(response)
+  })
+})
+
 
 
 
@@ -84,7 +139,29 @@ router.put("/modificar/datos/:nombre", async (req, res) => {
       }
     )
     .then((response) => {
-      res.send("Actualizado");
+      usuarios.updateMany(
+        { tutoria: req.params.nombre },
+        {
+          $unset: {
+            tutoria: ''
+          }
+        }
+      )
+        .then(response => {
+          usuarios.findOneAndUpdate(
+            { Nombre: req.body.tutor },
+            {
+              $set: {
+                tutoria: req.params.nombre
+              }
+            }
+          )
+            .then(res.send("Actualizado"))
+            .catch(error => console.log(error))
+        })
+        .catch(error => console.log(error))
+
+
     })
     .catch((error) => {
       res.send(error);

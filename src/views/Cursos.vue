@@ -1,6 +1,17 @@
 <template>
   <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'">
-    <h2>Grado - {{ $route.params.nombre.toUpperCase() }}</h2>
+    <div class="cabecera col row m-0 p-0">
+      <h2 class="col">Grado - {{ $route.params.nombre.toUpperCase() }}</h2>
+    </div>
+    <div class="row mt-2">
+      <h5 class="col-2">
+        faltas: <b :class="Na > 0 ? 'text-danger' : '' ">{{ Na }}</b>
+      </h5>
+      <p class="col"></p>
+      <h5 class="col-3 p-0">
+        Tutor del Curso: <b style="color: #36bcdf">{{ tutor }}</b>
+      </h5>
+    </div>
 
     <table class="table">
       <thead>
@@ -37,6 +48,8 @@ export default {
   data() {
     return {
       datos: null,
+      tutor: null,
+      Na: null,
     };
   },
   methods: {
@@ -45,6 +58,32 @@ export default {
         name: "Asistencia",
         params: { id: dato._id, nombre: dato.Alumno.Nombre },
       });
+    },
+    tutor1() {
+      axios
+        .get(
+          "http://" +
+            this.$store.state.ruta +
+            ":3000/cursos/tutor/" +
+            this.$route.params.nombre
+        )
+        .then((response) => {
+          if (response.data.length > 0) {
+            this.tutor = response.data[0].Nombre;
+          } else {
+            this.tutor = "No Tiene";
+          }
+        });
+    },
+    faltas() {
+      axios
+        .get(
+          "http://" +
+            this.$store.state.ruta +
+            ":3000/cursos/dia/" +
+            this.$route.params.nombre
+        )
+        .then((response) => (this.Na = response.data.length));
     },
   },
   mounted() {
@@ -66,6 +105,8 @@ export default {
         this.datos = response.data;
       })
       .catch((error) => console.log(error));
+    this.tutor1();
+    this.faltas();
   },
   watch: {
     "$route.params.nombre": {
@@ -88,6 +129,8 @@ export default {
             this.datos = response.data;
           })
           .catch((error) => console.log(error));
+        this.tutor1();
+        this.faltas();
       },
     },
   },
@@ -95,14 +138,14 @@ export default {
 </script>
 
 <style scoped>
-h2 {
+div.cabecera {
   background-color: #32217e;
   color: white;
 }
 td {
   cursor: pointer;
 }
-tbody tr{
+tbody tr {
   cursor: pointer;
   margin: 0.5%;
   background-color: transparent;
