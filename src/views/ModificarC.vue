@@ -1,59 +1,58 @@
 <template>
   <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'">
-    <div>
-      <div>
-        <div class="row">
-          <i
-            class="fas fa-arrow-left col-1"
-            style="font-size: 1.5rem"
-            v-on:click="back()"
-          ></i>
-          <h2 class="col-9">
-            Modificar Datos del Curso: {{ input.grado }} / {{ input.nombre }}
-          </h2>
-          <h6 class="col-2">Alumnos {{ cant }}</h6>
-        </div>
+    <div class="row col">
+      <i
+        class="fas fa-arrow-left col-1 mt-2 p-0"
+        style="font-size: 1.5rem"
+        v-on:click="back()"
+      ></i>
+      <h2 class="col mt-2 p-0">
+        Modificar Datos del Curso: {{ input.grado }} / {{ input.nombre }}
+      </h2>
+      <h5 class="col-1 mt-2 p-0">
+        Alumnos: <b style="color: #36bcdf">{{ cant }}</b>
+      </h5>
+    </div>
 
-        <div class="form-row">
-          <div class="col-6">
-            <label for="">Fecha de Inicio del curso</label>
-            <input
-              type="date"
-              class="form-control"
-              v-model="input.fechainicio"
-            />
-          </div>
-          <div class="col-6">
-            <label for="">Hora De Entrada Del Curso</label>
-            <input type="time" class="form-control" v-model="input.horaE" />
-          </div>
-          <div class="col-6">
-            <label for="">Fecha Final del curso</label>
-            <input type="date" class="form-control" v-model="input.fechafin" />
-          </div>
-          <div class="col-6">
-            <label for="">Hora De Salida Del Curso</label>
-            <input type="time" class="form-control" v-model="input.horaS" />
-          </div>
-        </div>
-        <br />
-        <button class="btn btn-danger" v-on:click="delyear()">
-          Eliminar Curso
-        </button>
-        &nbsp;
-        <button class="btn btn-primary" v-on:click="modificar()">
-          Modificar Datos
-        </button>
-
-        <p v-if="error != null" class="alert alert-danger" role="alert">
-          {{ error }}
-        </p>
-        <p v-if="exito != null" class="alert alert-success" role="alert">
-          {{ exito }}
-        </p>
-        <p v-else></p>
+    <div class="form-row col">
+      <div class="col-6">
+        <label for="" class="col">Fecha De Inicio Del Curso:</label>
+        <input
+          type="date"
+          class="form-control col"
+          v-model="input.fechainicio"
+        />
+      </div>
+      <div class="col-6">
+        <label for="" class="col">Hora De Entrada Del Curso:</label>
+        <input type="time" class="form-control col" v-model="input.horaE" />
+      </div>
+      <br />
+      <div class="col-6">
+        <label for="" class="col">Fecha Final Del Curso:</label>
+        <input type="date" class="form-control col" v-model="input.fechafin" />
+      </div>
+      <div class="col-6">
+        <label for="" class="col">Hora De Salida Del Curso:</label>
+        <input type="time" class="form-control col" v-model="input.horaS" />
       </div>
     </div>
+    <br />
+    <button class="btn btn-danger" v-on:click="delyear()">
+      Eliminar Curso
+    </button>
+    &nbsp;
+    <button class="btn btn-primary" v-on:click="modificar()">
+      Modificar Datos
+    </button>
+
+    <p v-if="error != null" class="alert alert-danger" role="alert">
+      {{ error }}
+    </p>
+    <p v-if="exito != null" class="alert alert-success" role="alert">
+      {{ exito }}
+    </p>
+    <p v-else></p>
   </div>
 </template>
 <script>
@@ -144,8 +143,8 @@ export default {
         if (response.data.length == 0) {
           this.$router.go(-1);
         }
-        this.input.grado = response.data[0].curso.grado;
-        this.input.nombre = response.data[0].curso.Nombre;
+        this.input.grado = response.data[0].curso.grado.toUpperCase();
+        this.input.nombre = response.data[0].curso.Nombre.toUpperCase();
         this.input.fechainicio = response.data[0].inicio;
         this.input.fechafin = response.data[0].fin;
         this.input.horaE = response.data[0].curso["Hora-entrada"];
@@ -166,6 +165,9 @@ export default {
 <style scoped>
 i {
   color: #36bcdf;
+}
+i:hover {
+  cursor: pointer;
 }
 input[type="date"].form-control,
 input[type="datetime-local"].form-control,

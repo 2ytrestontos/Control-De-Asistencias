@@ -1,7 +1,7 @@
 <template>
-  <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'">
+  <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'" class="col">
     <div v-if="$route.params.nombre != null">
-      <h2>
+      <h2 class="mt-2">
         Modificar Asistencia:
         <router-link :to="'/asistencias/' + $route.params.idalumno">{{
           alumno

@@ -49,12 +49,12 @@
         v-model="input.NombreG"
         value=""
         v-on:click="clear()"
+        v-on:change="años(input.NombreG)"
       >
         <option value="" selected disabled>Selecciona Un Curso</option>
         <option v-for="curso in curso" :key="curso">{{ curso }}</option></select
       ><br />
       <label for="año">Año que se va a cursar</label><br />
-      <div v-if="input.NombreG != 'cae'">
         <select
           name="año"
           v-model="input.NombreC"
@@ -63,20 +63,7 @@
           required
         >
           <option value="" selected disabled>año que se va a cursar</option>
-          <option>{{ input.NombreG }}1</option>
-          <option>{{ input.NombreG }}2</option>
-        </select>
-      </div>
-      <div v-else>
-        <select
-          name="año"
-          v-model="input.NombreC"
-          v-if="input.NombreG != ''"
-          v-on:change="horas()"
-          required
-        >
-          <option value="" selected disabled>año que se va a cursar</option>
-          <option>{{ input.NombreG }}1</option>
+          <option v-for="anios in anios" :key="anios">{{ anios.curso.Nombre}}</option>
         </select>
       </div>
       <br />
@@ -145,8 +132,6 @@
     <div v-else class="alert alert-success" role="alert">
       Alumno Creado Correctamente
     </div>
-  </div>
-  <div v-else></div>
 </template>
 <script>
 import axios from "axios";
@@ -158,6 +143,7 @@ export default {
       curso: null,
       datos: null,
       error: null,
+      anios: null,
       input: {
         Nombre: "",
         ap1: "",
@@ -219,6 +205,13 @@ export default {
     },
     clear() {
       this.input.NombreC = "";
+    },
+    años(grado){
+      axios
+        .get('http://'+this.$store.state.ruta+':3000/cursos/anio/'+grado)
+        .then(response => {
+          this.anios = response.data
+        })
     },
     horas() {
       var inicio = null;
