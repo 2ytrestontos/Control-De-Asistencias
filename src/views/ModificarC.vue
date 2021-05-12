@@ -36,6 +36,20 @@
         <label for="" class="col">Hora De Salida Del Curso:</label>
         <input type="time" class="form-control col" v-model="input.horaS" />
       </div>
+      <div class="col">
+        <label for="Tutoria">Tutor del curso</label>
+        <select
+          name="Tutoria"
+          id="Tutoria"
+          class="form-control col"
+          v-model="input.tutor"
+        >
+          <option value="No Tiene">No Tiene</option>
+          <option v-for="profesores in profesores" :key="profesores">
+            {{ profesores }}
+          </option>
+        </select>
+      </div>
     </div>
     <br />
     <button class="btn btn-danger" v-on:click="delyear()">
@@ -45,7 +59,8 @@
     <button class="btn btn-primary" v-on:click="modificar()">
       Modificar Datos
     </button>
-
+    <br />
+    <br />
     <p v-if="error != null" class="alert alert-danger" role="alert">
       {{ error }}
     </p>
@@ -64,6 +79,7 @@ export default {
     return {
       datos: null,
       cant: null,
+      profesores: [],
       input: {
         grado: null,
         nombre: null,
@@ -71,6 +87,7 @@ export default {
         fechafin: null,
         horaE: null,
         horaS: null,
+        tutor: null,
       },
       error: null,
       exito: null,
@@ -85,7 +102,8 @@ export default {
         this.input.fechainicio != "" &&
         this.input.fechafin != "" &&
         this.input.horaE != "" &&
-        this.input.horaS != ""
+        this.input.horaS != "" &&
+        this.input.tutor != ""
       ) {
         axios
           .put(
@@ -98,6 +116,7 @@ export default {
               horaS: this.input.horaS,
               fechainicio: new Date(this.input.fechainicio),
               fechafin: new Date(this.input.fechafin),
+              tutor: this.input.tutor,
             }
           )
           .then((response) => {
@@ -130,6 +149,48 @@ export default {
         console.log("No se elimino");
       }
     },
+    cargarProfesores() {
+      axios
+        .get(
+          "http://" +
+            this.$store.state.ruta +
+            ":3000/cursos/tutor/" +
+            this.$route.params.nombre
+        )
+        .then((response) => {
+          if (response.data.length < 1) {
+            this.input.tutor = "no tiene";
+            axios
+              .get(
+                "http://" +
+                  this.$store.state.ruta +
+                  ":3000/cursos/profesores/" +
+                  null
+              )
+              .then((doc) => {
+                for (var i = 0; i < doc.data.length; i++) {
+                  this.profesores[i] = doc.data[i].Nombre;
+                }
+              });
+          } else {
+            this.input.tutor = response.data[0].Nombre;
+            this.profesores[0] = response.data[0].Nombre;
+            axios
+              .get(
+                "http://" +
+                  this.$store.state.ruta +
+                  ":3000/cursos/profesores/" +
+                  response.data[0].Nombre
+              )
+              .then((doc) => {
+                for (var i = 0; i < doc.data.length + 1; i++) {
+                  var u = i + 1;
+                  this.profesores[u] = doc.data[i].Nombre;
+                }
+              });
+          }
+        });
+    },
   },
   mounted() {
     axios
@@ -159,6 +220,7 @@ export default {
           .then((response) => (this.cant = response.data.count));
       })
       .catch((error) => console.log(error));
+    this.cargarProfesores();
   },
 };
 </script>

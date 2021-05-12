@@ -5,6 +5,7 @@ const Usuarios = new Schema(
   {
     Nombre: String,
     Pass: String,
+    tutoria: String,
   },
   { versionKey: false }
 );
