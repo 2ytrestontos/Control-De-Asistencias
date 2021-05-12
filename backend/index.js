@@ -16,63 +16,6 @@ const softSPI = new SoftSPI({
 });
 const { Schema } = mongoose;
 
-// comprobarAsistencias()
-
-// function comprobarAsistencias() {
-//   alumnos.aggregate([
-//     {
-//       '$match': {
-//         'Alumno.Nombre': {
-//           '$ne': 'test'
-//         }
-//       }
-//     }, {
-//       '$project': {
-//         '_id': 1,
-//         'Alumno.Nombre': 1
-//       }
-//     }
-//   ]).then(response => {
-//     for (var i = 0; i < response.length; i++) {
-//       var c = 0;
-//       console.log(response[i].Alumno.Nombre)
-//       asistencias.aggregate([
-//         {
-//           '$match': {
-//             'id-alumno': response[i]._id,
-//             'fecha-entrada': {
-//               '$gt': new Date()
-//             }
-//           }
-//         }
-//       ])
-//         .then(doc => {
-
-//           if (doc.length > 0) {
-//             console.log('Tiene Entrada ' + response[c].Alumno.Nombre) 
-//             c++
-//           } 
-//           else {
-
-//             // asist.create({
-//             //   "id-alumno": doc[0]._id,
-//             //   "fecha-entrada": fechaActual,
-//             //   "fecha-salida": null,
-//             //   misterio: null,
-//             // });
-//           }
-//         })https://discord.com/channels/@me/341966554197524500/840667012891279410
-//     }
-//   })
-// }
-
-
-
-
-
-
-
-
 mongoose
   .connect(
     "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority",
@@ -87,9 +30,6 @@ mongoose
   .catch((err) => console.error(err));
 
 const mfrc522 = new Mfrc522(softSPI).setResetPin(22).setBuzzerPin(18);
-
-// console.log(new Date().toLocaleString())
-// console.log(moment().utc(new Date().toLocaleString()).tz("Europe/bucharest").format())
 
 //Al leer los datos
 function checkUser(id) {
