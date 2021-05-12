@@ -2,6 +2,7 @@
   <div
     v-if="datos && $store.state.sesion && $store.state.tipo == 'Profesor'"
     :data="datos"
+    class="col"
   >
     <!-- modal addyear -->
     <div
@@ -213,7 +214,7 @@
 
     <h2><u> Cursos De Almi:</u></h2>
     <div class="row col">
-      <div class="col-6" v-for="datos in datos" :key="datos">
+      <div class="col-6 col-md-6" v-for="datos in datos" :key="datos">
         <div class="card bg-primary">
           <div class="card-body row">
             <button class="col btn" v-on:click="delgrado(datos.grado)">

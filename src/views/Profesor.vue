@@ -5,6 +5,7 @@
       input.usuario != null &&
       $store.state.tipo == 'Profesor'
     "
+    class="col"
   >
     <h2>Editar Profesor: {{ nombre }}</h2>
     <div class="form-group row">

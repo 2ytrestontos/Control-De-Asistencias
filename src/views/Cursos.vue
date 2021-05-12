@@ -2,7 +2,7 @@
   <div v-if="$store.state.sesion && $store.state.tipo == 'Profesor'">
     <h2>Grado - {{ $route.params.nombre.toUpperCase() }}</h2>
 
-    <table class="table table-hover">
+    <table class="table">
       <thead>
         <tr>
           <th scope="col">Nombre</th>
@@ -15,7 +15,7 @@
           v-for="datos in datos"
           :key="datos._id"
           v-on:click="redirect(datos)"
-          v-bind:class="datos.curso.faltas ? 'alert-danger' : ''"
+          v-bind:class="datos.curso.faltas ? 'alert-danger text-danger' : ''"
           role="alert"
         >
           <td>
@@ -101,5 +101,15 @@ h2 {
 }
 td {
   cursor: pointer;
+}
+tbody tr{
+  cursor: pointer;
+  margin: 0.5%;
+  background-color: transparent;
+  transition: background-color 0.5s ease-out;
+}
+tbody tr:hover {
+  transition: 0.5s all ease;
+  background-color: gray;
 }
 </style>

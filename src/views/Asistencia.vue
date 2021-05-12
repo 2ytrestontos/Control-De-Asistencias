@@ -177,8 +177,12 @@ div p#porc {
  width: 145px;
  border-radius: 15px;
 }
-
+.linea {
+  background-color: none;
+  transition: background-color 1s ;
+}
 .linea:hover {
+  transition: 1s all ease;
     display: table-row;
     vertical-align: inherit;
     border-color: inherit;
