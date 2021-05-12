@@ -1,6 +1,8 @@
 <template>
   <div v-if="$store.state.sesion">
-    <h2 v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'"> Asistencias - {{ nombre }}</h2>
+    <h2 v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
+      Asistencias - {{ nombre }}
+    </h2>
     <div class="d-flex justify-content-center">
       <p id="porc" v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
         {{ porc }}% de Faltas
@@ -21,7 +23,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="linea"
+        <tr
+          class="linea"
           v-for="datos in datos"
           :key="datos._id"
           v-on:click="redirect(datos._id)"
@@ -67,6 +70,12 @@ export default {
           },
         });
       }
+    },
+    update() {
+      axios.put(
+        "http://" + this.$store.state.ruta + ":3000/Alumnos",
+        this.props
+      );
     },
   },
   mounted() {
@@ -134,10 +143,7 @@ export default {
             id: this.$route.params.id,
             porc: this.porc,
           };
-          axios.put(
-            "http://" + this.$store.state.ruta + ":3000/Alumnos",
-            this.props
-          );
+          this.update();
         }
       });
   },
@@ -153,13 +159,7 @@ export default {
             }
           })
           .catch((error) => console.log(error));
-        axios
-          .put("http://" + this.$store.state.ruta + ":3000/Alumnos", this.props)
-          .then((response) => {
-            response;
-            // console.log(response);
-          })
-          .catch((error) => console.log(error));
+        this.update();
       },
     },
   },
@@ -174,19 +174,18 @@ td {
   cursor: pointer;
 }
 div p#porc {
- width: 145px;
- border-radius: 15px;
+  width: 145px;
+  border-radius: 15px;
 }
 .linea {
   background-color: none;
-  transition: background-color 1s ;
+  transition: background-color 0.4s;
 }
 .linea:hover {
-  transition: 1s all ease;
-    display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;
-    background-color: #36bcdf;
+  transition: 0.4s all ease;
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+  background-color: #36bcdf;
 }
-
 </style>

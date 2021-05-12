@@ -231,7 +231,7 @@ p {
   background-color: transparent;
   transition: background-color 0.5s ease-out;
 }
-.izq li:first-child {
+.list-group-item:first-child {
   background-color: #d1ecf1;
 }
 .izq ul {
@@ -249,6 +249,7 @@ p {
   font-size: 1.1 rem; */
   transition: 0.5s all ease;
   background-color: gray;
+  color: white;
 }
 /*Panel de Administracion*/
 .der[data-v-fae5bece] {
