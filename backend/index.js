@@ -15,56 +15,56 @@ const softSPI = new SoftSPI({
 });
 const { Schema } = mongoose;
 
-
-cron.schedule('* 22 * * *', () => {
-    let today = new Date();
-    let hoy = today.toISOString().split("T")[0];
-    alumnos
-      .aggregate([
-        {
-          $lookup: {
-            from: "Asistencias",
-            localField: "_id",
-            foreignField: "id-alumno",
-            as: "test",
-          },
+cron.schedule("* 22 * * *", () => {
+  let today = new Date();
+  let hoy = today.toISOString().split("T")[0];
+  alumnos
+    .aggregate([
+      {
+        $lookup: {
+          from: "Asistencias",
+          localField: "_id",
+          foreignField: "id-alumno",
+          as: "test",
         },
-        {
-          $match: {
-            "Alumno.Nombre": {
-              $ne: "test",
-            },
-            "curso.Nombre": "asir2",
-            "test.fecha-entrada": {
-              $not: {
-                $gte: new Date(hoy),
-              },
+      },
+      {
+        $match: {
+          "Alumno.Nombre": {
+            $ne: "test",
+          },
+          "curso.Nombre": "asir2",
+          "test.fecha-entrada": {
+            $not: {
+              $gte: new Date(hoy),
             },
           },
         },
-        {
-          $project: {
-            "id-alumno": 1,
-            "Alumno.Nombre": 1,
-            "Alumno.ap1": 1,
-            "Alumno.ap2": 1,
-          },
+      },
+      {
+        $project: {
+          "id-alumno": 1,
+          "Alumno.Nombre": 1,
+          "Alumno.ap1": 1,
+          "Alumno.ap2": 1,
         },
-      ])
-      .then((response) => {
-        console.log(response);
-        for (i = 0; i < response.length; i++) {
-          asist
-            .create({
-              "id-alumno": response[i]._id,
-              "fecha-entrada": new Date(),
-              "fecha-salida": new Date(),
-              misterio: true,
-            })
-            .then((doc) => console.log(doc));
-        }22
-      });
-})
+      },
+    ])
+    .then((response) => {
+      console.log(response);
+      for (i = 0; i < response.length; i++) {
+        asist
+          .create({
+            "id-alumno": response[i]._id,
+            "fecha-entrada": new Date(),
+            "fecha-salida": new Date(),
+            misterio: true,
+          })
+          .then((doc) => console.log(doc));
+      }
+      22;
+    });
+});
 mongoose
   .connect(
     "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority",
@@ -83,11 +83,18 @@ const mfrc522 = new Mfrc522(softSPI).setResetPin(22).setBuzzerPin(18);
 //Al leer los datos
 function checkUser(id) {
   //let fechaActual = new Date().toLocaleString('es-ES', {timeZone: 'Europe/Madrid'})
-  let fecha = new Date().toLocaleString('es-ES', {timeZone: 'Europe/Madrid'})
-  let dividirFecha = fecha.split(' ');
-  let añomesdia = dividirFecha[0].split('/')
-  let horaMinutoSegundo = dividirFecha[1].split(':')
-  let fechaActual = new Date(añomesdia[2],añomesdia[1]-1,añomesdia[0],horaMinutoSegundo[0],horaMinutoSegundo[1],horaMinutoSegundo[2])
+  let fecha = new Date().toLocaleString("es-ES", { timeZone: "Europe/Madrid" });
+  let dividirFecha = fecha.split(" ");
+  let añomesdia = dividirFecha[0].split("/");
+  let horaMinutoSegundo = dividirFecha[1].split(":");
+  let fechaActual = new Date(
+    añomesdia[2],
+    añomesdia[1] - 1,
+    añomesdia[0],
+    horaMinutoSegundo[0],
+    horaMinutoSegundo[1],
+    horaMinutoSegundo[2]
+  );
   alumnos
     .find({
       "id-barik": id,
@@ -111,12 +118,10 @@ function checkUser(id) {
         existe.exec(function(err, datos) {
           if (datos.length > 0) {
             asist
-              .findOneAndUpdate(
-                {
-                  "fecha-salida": fechaActual,
-                  misterio: false,
-                }
-              )
+              .findOneAndUpdate({
+                "fecha-salida": fechaActual,
+                misterio: false,
+              })
               .then((doc) => {
                 console.log(doc);
               });
