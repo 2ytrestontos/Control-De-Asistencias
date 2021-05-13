@@ -8,8 +8,6 @@ const alumnos = require("../backend/models/alumnos");
 const asist = require("../backend/models/asistencias");
 const moment = require("moment-timezone");
 const cron = require("node-cron");
-var fecha = new Date()
-console.log(fecha.toLocaleString('es-ES', {timeZone: 'Europe/Madrid'}))
 const softSPI = new SoftSPI({
   clock: 23, // pin number of SCLK
   mosi: 19, // pin number of MOSI
@@ -19,7 +17,6 @@ const softSPI = new SoftSPI({
 const { Schema } = mongoose;
 
 
-console.log(new Date().toISOString())
 cron.schedule('* 22 * * *', () => {
     let today = new Date();
     let hoy = today.toISOString().split("T")[0];
