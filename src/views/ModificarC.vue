@@ -25,7 +25,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <div>
+            <div v-if="cant > 0">
               <table class="table">
                 <thead>
                   <tr>
@@ -35,7 +35,11 @@
                   </tr>
                 </thead>
                 <tbody v-if="$store.state.tutoria == $route.params.nombre">
-                  <tr v-for="alumnos in alumnos" :key="alumnos._id">
+                  <tr
+                    v-for="alumnos in alumnos"
+                    class="linea"
+                    :key="alumnos._id"
+                  >
                     <td>
                       {{ alumnos.Alumno.Nombre }}
                     </td>
@@ -60,6 +64,7 @@
                 </tbody>
               </table>
             </div>
+            <div v-else><h2>No Hay Alumnos</h2></div>
           </div>
           <div class="modal-footer">
             <button
@@ -87,9 +92,12 @@
       </h2>
       <h5 class="col-1 mt-2 p-0">
         Alumnos:
-        <b style="color: #36bcdf" data-toggle="modal" data-target="#Alumnos">{{
-          cant
-        }}</b>
+        <b
+          style="color: #36bcdf; cursor: pointer"
+          data-toggle="modal"
+          data-target="#Alumnos"
+          >{{ cant }}</b
+        >
       </h5>
     </div>
 
@@ -330,6 +338,7 @@ export default {
 </script>
 <style scoped>
 i {
+  transition: 0.4s all ease;
   color: #36bcdf;
 }
 i:hover {
@@ -362,4 +371,35 @@ input[type="time"].form-control[data-v-0eefcbd3] {
   padding: 2%;
   cursor: pointer;
 }
+
+td {
+  cursor: pointer;
+}
+tbody tr {
+  cursor: pointer;
+  margin: 0.5%;
+  background-color: transparent;
+  transition: background-color 0.5s ease-out;
+}
+tbody tr:hover {
+  transition: 0.5s all ease;
+  background-color: gray;
+  color: white;
+}
+
+/* .linea {
+  background-color: none;
+  transition: background-color 0.4s;
+}
+.linea:hover {
+  transition: 0.4s all ease;
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+  background-color: #36bcdf;
+}
+.linea:hover i{
+  transition: 0.4s all ease;
+  color: black
+} */
 </style>

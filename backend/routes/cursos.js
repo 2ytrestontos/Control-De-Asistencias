@@ -12,6 +12,15 @@ router.get("/", async (req, res) => {
     })
     .catch(error => console.log(error))
 });
+router.get("/anios", async (req, res) => {
+  await alumnos.distinct("curso.Nombre")
+    .then(años => {
+      if (años.length > 0) {
+        res.send(años)
+      }
+    })
+    .catch(error => console.log(error))
+});
 router.get("/anio/:nombre", (req, res) => {
   alumnos
     .aggregate([

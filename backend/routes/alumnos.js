@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const alumnos = require("../models/alumnos");
+const asistencias = require("../models/asistencias");
 
 router.get("/:id", async (req, res) => {
   await alumnos.aggregate([
@@ -101,7 +102,13 @@ router.delete('/del/:id', async (req, res) => {
   await alumnos.deleteOne({
     '_id': req.params.id
   })
-    .then(res.send('Eliminado Correctamente'))
+    .then(() => {
+      asistencias.deleteMany({
+        'id-alumno': req.params.id
+      }).then( () => {
+        res.send('Eliminado Correctamente')
+      })
+    })
 })
 
 module.exports = router;

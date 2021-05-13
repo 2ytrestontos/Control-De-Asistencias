@@ -5,7 +5,6 @@ export default createStore({
     sesion: localStorage.nombre,
     ruta: "ruffuss.duckdns.org",
     // ruta: "192.168.1.72",
-    delete: null,
     tipo: localStorage.tipo,
     tutoria: localStorage.tutoria
   },

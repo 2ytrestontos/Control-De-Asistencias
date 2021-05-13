@@ -48,6 +48,13 @@
                   placeholder="Contraseña"
                 />
               </div>
+              <div class="form-group">
+                <!-- <label for="pass" class="col-form-label">Contraseña</label> -->
+                <label for="tutor">Tutor de: </label>
+                <select id="tutor" name="tutor" v-model="input.tut">
+                  <option v-for="anios in anios" :key="anios">{{anios}}</option>
+                </select>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -128,26 +135,32 @@ export default {
       input: {
         usuario: "",
         pass: "",
+        tut: "",
       },
       datos: null,
       error: null,
       exito: null,
       exito1: this.$route.params.exito,
       cursos: null,
+      anios: []
     };
   },
   mounted() {
-    axios
-      .get("http://" + this.$store.state.ruta + ":3000/adduser")
-      .then((response) => {
-        this.cargarProfesores(response);
-      });
+    this.todosProfesores();
+    this.cargarCursos();
   },
   methods: {
     clear() {
       this.error = null;
       this.exito = null;
       this.exito1 = null;
+    },
+    todosProfesores() {
+      axios
+        .get("http://" + this.$store.state.ruta + ":3000/adduser")
+        .then((response) => {
+          this.cargarProfesores(response);
+        });
     },
     redirect(id) {
       this.clear();
@@ -174,12 +187,11 @@ export default {
     },
     registro() {
       this.clear();
-      this.props = { usuario: this.input.usuario, pass: this.input.pass };
       if (this.input.usuario != "" && this.input.pass != "") {
         axios
           .post(
             "http://" + this.$store.state.ruta + ":3000/adduser",
-            this.props
+            this.input
           )
           .then((response) => {
             if (response.data == "usuario creado correctamente") {
@@ -199,6 +211,13 @@ export default {
       } else {
         this.error = "Rellene todos los campos";
       }
+    },
+    cargarCursos() {
+      axios
+        .get("http://" + this.$store.state.ruta + ":3000/cursos/anios")
+        .then((años) => {
+          this.anios = años.data;
+        });
     },
   },
 };

@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
       if (doc.length > 0) {
         res.send("usuario existente");
       } else {
-        Usuarios.create({ Nombre: req.body.usuario, Pass: hash })
+        Usuarios.create({ Nombre: req.body.usuario, Pass: hash , tutoria: req.body.tut})
           .then(resultado => {
             if (resultado) {
               res.send("usuario creado correctamente");
