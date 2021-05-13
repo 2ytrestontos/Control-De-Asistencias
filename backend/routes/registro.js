@@ -8,15 +8,18 @@ router.post("/", async (req, res) => {
     .createHash("sha512")
     .update(req.body.pass)
     .digest("hex");
-  await Alumnos.find(
-    {
-      Alumno: { Nombre: req.body.Nombre, ap1: req.body.ap1, ap2: req.body.ap2, pass: hash },
+  await Alumnos.find({
+      Alumno: {
+        Nombre: req.body.Nombre,
+        ap1: req.body.ap1,
+        ap2: req.body.ap2,
+        pass: hash
+      },
       "id-barik": req.body.barik,
     })
     .then(doc => {
       if (doc.length <= 0) {
-        Alumnos.create(
-          {
+        Alumnos.create({
             Alumno: {
               Nombre: req.body.Nombre,
               ap1: req.body.ap1,
@@ -34,12 +37,11 @@ router.post("/", async (req, res) => {
               "Fecha-fin": req.body.Ff,
             },
           })
-          .then(response => res.send("usuario creado correctamente"))
+          .then(() => res.send("usuario creado correctamente"))
           .catch(error => console.log(error))
       } else {
         res.send("usuario existente");
       }
-    }
-    );
+    });
 });
 module.exports = router;

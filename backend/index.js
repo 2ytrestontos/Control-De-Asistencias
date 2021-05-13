@@ -14,12 +14,13 @@ const softSPI = new SoftSPI({
   miso: 21, // pin number of MISO
   client: 24, // pin number of CS
 });
-const { Schema } = mongoose;
+const {
+  Schema
+} = mongoose;
 
 mongoose
   .connect(
-    "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority",
-    {
+    "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority", {
       useNewUrlParser: true,
       useFindAndModify: true,
       useUnifiedTopology: true,
@@ -34,30 +35,36 @@ const mfrc522 = new Mfrc522(softSPI).setResetPin(22).setBuzzerPin(18);
 //Al leer los datos
 function checkUser(id) {
   var fechaActual = moment().utc(new Date().toLocaleString()).tz("Europe/bucharest").format();
-  alumnos.find({ "id-barik": id })
+  alumnos.find({
+      "id-barik": id
+    })
     .then(doc => {
       if (doc.length == 0) {
         console.log("no se a encontrado al alumno" + "  " + id);
       } else {
         var today = new Date();
         var hoy = today.toISOString().split("T")[0];
-        const existe = asist.aggregate([
-          {
-            $match: {
-              "id-alumno": doc[0]._id,
-              "fecha-entrada": { $gte: new Date(hoy) },
+        const existe = asist.aggregate([{
+          $match: {
+            "id-alumno": doc[0]._id,
+            "fecha-entrada": {
+              $gte: new Date(hoy)
             },
           },
-        ]);
+        }, ]);
         existe.exec(function (err, datos) {
           if (datos.length > 0) {
-            asist.findOneAndUpdate(
-              {
-                "id-alumno": doc[0]._id,
-                "fecha-entrada": { $gte: new Date(hoy) },
+            asist.findOneAndUpdate({
+              "id-alumno": doc[0]._id,
+              "fecha-entrada": {
+                $gte: new Date(hoy)
               },
-              { "fecha-salida": fechaActual, misterio: false }
-            ).then(doc => { console.log(doc) })
+            }, {
+              "fecha-salida": fechaActual,
+              misterio: false
+            }).then(doc => {
+              console.log(doc)
+            })
           } else {
             console.log("No existe");
             asist.create({

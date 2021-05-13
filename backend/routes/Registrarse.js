@@ -8,7 +8,9 @@ router.get("/", async (req, res) => {
     .then(usuarios => res.send(usuarios))
 });
 router.get("/:id", async (req, res) => {
-  await Usuarios.find({ _id: req.params.id })
+  await Usuarios.find({
+      _id: req.params.id
+    })
     .then(usuario => res.send(usuario))
 });
 router.post("/", async (req, res) => {
@@ -17,12 +19,19 @@ router.post("/", async (req, res) => {
     .update(req.body.pass)
     .digest("hex");
 
-  await Usuarios.find({ Nombre: req.body.usuario, Pass: hash })
+  await Usuarios.find({
+      Nombre: req.body.usuario,
+      Pass: hash
+    })
     .then(doc => {
       if (doc.length > 0) {
         res.send("usuario existente");
       } else {
-        Usuarios.create({ Nombre: req.body.usuario, Pass: hash })
+        Usuarios.create({
+            Nombre: req.body.usuario,
+            Pass: hash,
+            tutoria: req.body.tut
+          })
           .then(resultado => {
             if (resultado) {
               res.send("usuario creado correctamente");
@@ -35,8 +44,10 @@ router.post("/", async (req, res) => {
     });
 });
 router.delete("/", async (req, res) => {
-  await Usuarios.deleteOne({ Nombre: req.body.usuario })
-    .then(usuario => {
+  await Usuarios.deleteOne({
+      Nombre: req.body.usuario
+    })
+    .then(() => {
       res.send("eliminado correctamente");
     })
     .catch(error => console.log(error))
@@ -47,10 +58,14 @@ router.put("/", async (req, res) => {
     .update(req.body.pass)
     .digest("hex");
 
-  Usuarios.findOneAndUpdate(
-    { _id: req.body.id },
-    { $set: { Nombre: req.body.usuario, Pass: hash } }
-  )
+  Usuarios.findOneAndUpdate({
+      _id: req.body.id
+    }, {
+      $set: {
+        Nombre: req.body.usuario,
+        Pass: hash
+      }
+    })
     .then(res.send("Actualizado correctamente"))
     .catch(res.send("error al actualizar"));
 });

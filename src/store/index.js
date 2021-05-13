@@ -1,11 +1,12 @@
-import { createStore } from "vuex";
+import {
+  createStore
+} from "vuex";
 import router from "../router";
 export default createStore({
   state: {
     sesion: localStorage.nombre,
     ruta: "ruffuss.duckdns.org",
     // ruta: "192.168.1.72",
-    delete: null,
     tipo: localStorage.tipo,
     tutoria: localStorage.tutoria
   },
