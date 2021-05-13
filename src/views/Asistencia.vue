@@ -1,8 +1,19 @@
 <template>
   <div v-if="$store.state.sesion">
-    <h2 v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
-      Asistencias - {{ nombre }}
-    </h2>
+    <div class="row contenedor col m-0 mb-2 " v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
+      <i
+        class="fas fa-arrow-left col-0 ml-1 mt-2"
+        style="font-size: 1.5rem"
+        v-on:click="back()"
+      ></i>
+      <h2
+
+        class="col"
+      >
+        Asistencias - {{ nombre }}
+      </h2>
+    </div>
+
     <div class="d-flex justify-content-center">
       <p id="porc" v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
         {{ porc }}% de Faltas
@@ -76,6 +87,9 @@ export default {
         "http://" + this.$store.state.ruta + ":3000/Alumnos",
         this.props
       );
+    },
+    back() {
+      this.$router.go(-1);
     },
   },
   mounted() {
@@ -167,9 +181,6 @@ export default {
 </script>
 
 <style scoped>
-h2ssad {
-  background-color: rgba(33, 199, 60, 0.425);
-}
 td {
   cursor: pointer;
 }

@@ -7,6 +7,7 @@ export default createStore({
     // ruta: "192.168.1.72",
     delete: null,
     tipo: localStorage.tipo,
+    tutoria: localStorage.tutoria
   },
   mutations: {},
   actions: {
@@ -16,10 +17,12 @@ export default createStore({
     reload() {
       this.state.sesion = localStorage.nombre;
       this.state.tipo = localStorage.tipo
+      this.state.tutoria = localStorage.tutoria
     },
     logout() {
       localStorage.removeItem("nombre");
       localStorage.removeItem("tipo");
+      localStorage.removeItem("tutoria");
       localStorage.removeItem("id");
       this.dispatch("reload");
     },

@@ -112,7 +112,10 @@ router.get('/dia/:curso', async (req, res) => {
       }
     }, {
       '$project': {
-        'id-alumno': 1
+        'id-alumno': 1,
+        'Alumno.Nombre': 1,
+        'Alumno.ap1': 1,
+        'Alumno.ap2': 1,
       }
     }
   ]).then(response => {
@@ -120,10 +123,6 @@ router.get('/dia/:curso', async (req, res) => {
     res.send(response)
   })
 })
-
-
-
-
 router.put("/modificar/datos/:nombre", async (req, res) => {
   console.log(req.body);
   await alumnos
@@ -138,16 +137,16 @@ router.put("/modificar/datos/:nombre", async (req, res) => {
         },
       }
     )
-    .then((response) => {
+    .then(() => {
       usuarios.updateMany(
         { tutoria: req.params.nombre },
         {
-          $unset: {
+          $set: {
             tutoria: ''
           }
         }
       )
-        .then(response => {
+        .then(() => {
           usuarios.findOneAndUpdate(
             { Nombre: req.body.tutor },
             {
