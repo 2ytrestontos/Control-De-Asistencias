@@ -315,12 +315,9 @@ export default {
         .catch((error) => console.log(error));
     },
     async borrarAlumno(id) {
-      await axios
-        .delete("http://" + this.$store.state.ruta + ":3000/alumnos/del/" + id)
-        .then((response) => {
-          if (response == "Eliminado Correctamente") {
-          }
-        });
+      await axios.delete(
+        "http://" + this.$store.state.ruta + ":3000/alumnos/del/" + id
+      );
       this.cargarAlumnos();
     },
   },
