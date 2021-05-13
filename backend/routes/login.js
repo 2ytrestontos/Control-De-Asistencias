@@ -10,17 +10,32 @@ router.post("/", async (req, res) => {
     .update(req.body.pass)
     .digest("hex");
 
-  await Usuarios.find({ Nombre: req.body.usuario, Pass: hash })
+  await Usuarios.find({
+      Nombre: req.body.usuario,
+      Pass: hash
+    })
     .then(usu => {
       if (usu.length > 0) {
-        res.send({ usuario: usu, tipo: 'Profesor' })
+        res.send({
+          usuario: usu,
+          tipo: 'Profesor'
+        })
       } else {
-        Alumno.find({ 'Alumno.Nombre': req.body.usuario, 'Alumno.pass': hash })
+        Alumno.find({
+            'Alumno.Nombre': req.body.usuario,
+            'Alumno.pass': hash
+          })
           .then(response => {
             if (response.length > 0) {
-              res.send({ usuario: response, tipo: 'Alumno' })
+              res.send({
+                usuario: response,
+                tipo: 'Alumno'
+              })
             } else {
-              res.send({ usuario: response, tipo: 'error' })
+              res.send({
+                usuario: response,
+                tipo: 'error'
+              })
             }
           })
           .catch(error => error)

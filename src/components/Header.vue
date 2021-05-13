@@ -3,17 +3,18 @@
 </template>
 
 <script>
-export default {
-  name: "Header",
-};
+  export default {
+    name: "Header",
+  };
 </script>
 
 <style scoped>
-.header {
-  height: 7px;
-  background-color: #36bcdf;
-}
-i {
-  float: left;
-}
+  .header {
+    height: 7px;
+    background-color: #36bcdf;
+  }
+
+  i {
+    float: left;
+  }
 </style>

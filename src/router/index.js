@@ -1,4 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHistory
+} from "vue-router";
 import Home from "../views/Home.vue";
 import Asistencias from "../views/Asistencia.vue";
 import Cursos from "../views/Cursos.vue";
@@ -9,8 +12,7 @@ import Modificar from "../views/ModificarA.vue";
 import Tcursos from "../views/CursosT.vue";
 import ModificarC from "../views/ModificarC.vue";
 
-const routes = [
-  {
+const routes = [{
     path: "/",
     name: "Home",
     component: Home,
