@@ -7,20 +7,69 @@ const SoftSPI = require("rpi-softspi");
 const alumnos = require("../backend/models/alumnos");
 const asist = require("../backend/models/asistencias");
 const moment = require("moment-timezone");
-const asistencias = require("../backend/models/asistencias");
 const softSPI = new SoftSPI({
   clock: 23, // pin number of SCLK
   mosi: 19, // pin number of MOSI
   miso: 21, // pin number of MISO
   client: 24, // pin number of CS
 });
-const {
-  Schema
-} = mongoose;
+const { Schema } = mongoose;
+/*var hora;
 
+function diario() {
+  let today = new Date();
+  let hoy = today.toISOString().split("T")[0];
+  alumnos
+    .aggregate([
+      {
+        $lookup: {
+          from: "Asistencias",
+          localField: "_id",
+          foreignField: "id-alumno",
+          as: "test",
+        },
+      },
+      {
+        $match: {
+          "Alumno.Nombre": {
+            $ne: "test",
+          },
+          "curso.Nombre": "asir2",
+          "test.fecha-entrada": {
+            $not: {
+              $gte: new Date(hoy),
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          "id-alumno": 1,
+          "Alumno.Nombre": 1,
+          "Alumno.ap1": 1,
+          "Alumno.ap2": 1,
+        },
+      },
+    ])
+    .then((response) => {
+      console.log(response);
+      for (i = 0; i < response.length; i++) {
+        asist
+          .create({
+            "id-alumno": response[i]._id,
+            "fecha-entrada": new Date(),
+            "fecha-salida": new Date(),
+            misterio: true,
+          })
+          .then((doc) => console.log(doc));
+      }
+    });
+}
+*/
 mongoose
   .connect(
-    "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority", {
+    "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority",
+    {
       useNewUrlParser: true,
       useFindAndModify: true,
       useUnifiedTopology: true,
@@ -34,37 +83,48 @@ const mfrc522 = new Mfrc522(softSPI).setResetPin(22).setBuzzerPin(18);
 
 //Al leer los datos
 function checkUser(id) {
-  var fechaActual = moment().utc(new Date().toLocaleString()).tz("Europe/bucharest").format();
-  alumnos.find({
-      "id-barik": id
+  let fechaActual = moment()
+    .utc(new Date().toLocaleString())
+    .tz("Europe/bucharest")
+    .format();
+  alumnos
+    .find({
+      "id-barik": id,
     })
-    .then(doc => {
+    .then((doc) => {
       if (doc.length == 0) {
         console.log("no se a encontrado al alumno" + "  " + id);
       } else {
-        var today = new Date();
-        var hoy = today.toISOString().split("T")[0];
-        const existe = asist.aggregate([{
-          $match: {
-            "id-alumno": doc[0]._id,
-            "fecha-entrada": {
-              $gte: new Date(hoy)
-            },
-          },
-        }, ]);
-        existe.exec(function (err, datos) {
-          if (datos.length > 0) {
-            asist.findOneAndUpdate({
+        let today = new Date();
+        let hoy = today.toISOString().split("T")[0];
+        let existe = asist.aggregate([
+          {
+            $match: {
               "id-alumno": doc[0]._id,
               "fecha-entrada": {
-                $gte: new Date(hoy)
+                $gte: new Date(hoy),
               },
-            }, {
-              "fecha-salida": fechaActual,
-              misterio: false
-            }).then(doc => {
-              console.log(doc)
-            })
+            },
+          },
+        ]);
+        existe.exec(function(err, datos) {
+          if (datos.length > 0) {
+            asist
+              .findOneAndUpdate(
+                {
+                  "id-alumno": doc[0]._id,
+                  "fecha-entrada": {
+                    $gte: new Date(hoy),
+                  },
+                },
+                {
+                  "fecha-salida": fechaActual,
+                  misterio: false,
+                }
+              )
+              .then((doc) => {
+                console.log(doc);
+              });
           } else {
             console.log("No existe");
             asist.create({
@@ -81,6 +141,14 @@ function checkUser(id) {
 
 //Funcion de lectura de NFC
 function Reader() {
+  /*let hoy = new Date();
+  hora = hoy.getHours();
+  minuto = hoy.getMinutes();
+  actual = hora+':'+minuto;
+  if(actual == '22:00'){
+    diario()
+  }
+  console.log(actual);*/
   mfrc522.reset();
 
   let response = mfrc522.findCard();

@@ -337,13 +337,13 @@
     padding: 2%;
     cursor: pointer;
   }
-
+/*
   td {
     cursor: pointer;
   }
-
+*/
   tbody tr {
-    cursor: pointer;
+    /*cursor: pointer;*/
     margin: 0.5%;
     background-color: transparent;
     transition: background-color 0.5s ease-out;
