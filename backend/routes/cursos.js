@@ -119,8 +119,6 @@ router.get("/profesores/:tutor", async (req, res) => {
 
 router.get("/dia/:curso", async (req, res) => {
   console.log(req.params.curso);
-  let today = new Date();
-  let hoy = today.toISOString().split("T")[0];
   await alumnos
     .aggregate([
       {
@@ -139,7 +137,7 @@ router.get("/dia/:curso", async (req, res) => {
           "curso.Nombre": req.params.curso,
           "test.fecha-entrada": {
             $not: {
-              $gte: new Date(hoy),
+              $gte: new Date(),
             },
           },
         },

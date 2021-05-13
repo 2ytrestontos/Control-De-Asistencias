@@ -6,7 +6,7 @@ const Mfrc522 = require("../node_modules/mfrc522-rpi/index");
 const SoftSPI = require("rpi-softspi");
 const alumnos = require("../backend/models/alumnos");
 const asist = require("../backend/models/asistencias");
-const moment = require("moment-timezone");
+const cron = require("node-cron");
 const softSPI = new SoftSPI({
   clock: 23, // pin number of SCLK
   mosi: 19, // pin number of MOSI
@@ -14,9 +14,8 @@ const softSPI = new SoftSPI({
   client: 24, // pin number of CS
 });
 const { Schema } = mongoose;
-/*var hora;
 
-function diario() {
+cron.schedule("* 22 * * *", () => {
   let today = new Date();
   let hoy = today.toISOString().split("T")[0];
   alumnos
@@ -63,9 +62,9 @@ function diario() {
           })
           .then((doc) => console.log(doc));
       }
+      22;
     });
-}
-*/
+});
 mongoose
   .connect(
     "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority",
@@ -83,10 +82,19 @@ const mfrc522 = new Mfrc522(softSPI).setResetPin(22).setBuzzerPin(18);
 
 //Al leer los datos
 function checkUser(id) {
-  let fechaActual = moment()
-    .utc(new Date().toLocaleString())
-    .tz("Europe/bucharest")
-    .format();
+  //let fechaActual = new Date().toLocaleString('es-ES', {timeZone: 'Europe/Madrid'})
+  let fecha = new Date().toLocaleString("es-ES", { timeZone: "Europe/Madrid" });
+  let dividirFecha = fecha.split(" ");
+  let añomesdia = dividirFecha[0].split("/");
+  let horaMinutoSegundo = dividirFecha[1].split(":");
+  let fechaActual = new Date(
+    añomesdia[2],
+    añomesdia[1] - 1,
+    añomesdia[0],
+    horaMinutoSegundo[0],
+    horaMinutoSegundo[1],
+    horaMinutoSegundo[2]
+  );
   alumnos
     .find({
       "id-barik": id,
@@ -110,18 +118,10 @@ function checkUser(id) {
         existe.exec(function(err, datos) {
           if (datos.length > 0) {
             asist
-              .findOneAndUpdate(
-                {
-                  "id-alumno": doc[0]._id,
-                  "fecha-entrada": {
-                    $gte: new Date(hoy),
-                  },
-                },
-                {
-                  "fecha-salida": fechaActual,
-                  misterio: false,
-                }
-              )
+              .findOneAndUpdate({
+                "fecha-salida": fechaActual,
+                misterio: false,
+              })
               .then((doc) => {
                 console.log(doc);
               });
@@ -141,14 +141,6 @@ function checkUser(id) {
 
 //Funcion de lectura de NFC
 function Reader() {
-  /*let hoy = new Date();
-  hora = hoy.getHours();
-  minuto = hoy.getMinutes();
-  actual = hora+':'+minuto;
-  if(actual == '22:00'){
-    diario()
-  }
-  console.log(actual);*/
   mfrc522.reset();
 
   let response = mfrc522.findCard();
