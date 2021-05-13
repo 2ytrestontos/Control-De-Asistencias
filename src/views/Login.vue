@@ -27,7 +27,6 @@
     <div class="alert alert-danger" v-if="error != null">{{ error }}</div>
   </div>
   <div v-else></div>
-
 </template>
 <script>
 import axios from "axios";
@@ -53,9 +52,7 @@ export default {
         axios
           .post("http://" + this.$store.state.ruta + ":3000/login", this.props)
           .then((response) => {
-            console.log(response);
             if (response.data.usuario.length > 0) {
-              console.log(response.data.usuario[0]._id);
               if (response.data.tipo == "Profesor") {
                 this.$router.push("/");
               } else {
@@ -63,9 +60,11 @@ export default {
                   "/asistencias/" + response.data.usuario[0]._id
                 );
               }
+              console.log(response.data);
               localStorage.nombre = response.data.usuario[0].Nombre;
               localStorage.id = response.data.usuario[0]._id;
               localStorage.tipo = response.data.tipo;
+              localStorage.tutoria = response.data.usuario[0].tutoria;
               this.$store.dispatch("reload");
             } else {
               this.error = "Usuario / contraseña incorrectos";
@@ -86,7 +85,6 @@ export default {
 };
 </script>
 <style scoped>
-
 /*Input*/
 .form-control {
   background-color: aliceblue;
@@ -99,14 +97,14 @@ export default {
   margin: 20px auto;
 }
 .form-control[data-v-26084dc2] {
-    background-color: aliceblue;
-    outline: none;
-    padding: 20px;
-    display: block;
-    width: 300px;
-    border-radius: 3px;
-    border: 1px solid #eee;
-    margin: 20px auto;
-    border-color: #9C9B9B;
+  background-color: aliceblue;
+  outline: none;
+  padding: 20px;
+  display: block;
+  width: 300px;
+  border-radius: 3px;
+  border: 1px solid #eee;
+  margin: 20px auto;
+  border-color: #9c9b9b;
 }
 </style>

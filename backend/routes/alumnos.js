@@ -97,5 +97,11 @@ router.delete('/:nombre', async (req, res) => {
     console.log(response)
   })
 })
+router.delete('/del/:id', async (req, res) => {
+  await alumnos.deleteOne({
+    '_id': req.params.id
+  })
+    .then(res.send('Eliminado Correctamente'))
+})
 
 module.exports = router;
