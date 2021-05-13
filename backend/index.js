@@ -6,7 +6,6 @@ const Mfrc522 = require("../node_modules/mfrc522-rpi/index");
 const SoftSPI = require("rpi-softspi");
 const alumnos = require("../backend/models/alumnos");
 const asist = require("../backend/models/asistencias");
-const moment = require("moment-timezone");
 const cron = require("node-cron");
 const softSPI = new SoftSPI({
   clock: 23, // pin number of SCLK
