@@ -7,22 +7,72 @@ const SoftSPI = require("rpi-softspi");
 const alumnos = require("../backend/models/alumnos");
 const asist = require("../backend/models/asistencias");
 const moment = require("moment-timezone");
-const asistencias = require("../backend/models/asistencias");
-const cron = require('node-cron');
-
+const cron = require("node-cron");
+var fecha = new Date()
+console.log(fecha.toLocaleString('es-ES', {timeZone: 'Europe/Madrid'}))
 const softSPI = new SoftSPI({
   clock: 23, // pin number of SCLK
   mosi: 19, // pin number of MOSI
   miso: 21, // pin number of MISO
   client: 24, // pin number of CS
 });
-const {
-  Schema
-} = mongoose;
+const { Schema } = mongoose;
 
+
+console.log(new Date().toISOString())
+cron.schedule('* 22 * * *', () => {
+    let today = new Date();
+    let hoy = today.toISOString().split("T")[0];
+    alumnos
+      .aggregate([
+        {
+          $lookup: {
+            from: "Asistencias",
+            localField: "_id",
+            foreignField: "id-alumno",
+            as: "test",
+          },
+        },
+        {
+          $match: {
+            "Alumno.Nombre": {
+              $ne: "test",
+            },
+            "curso.Nombre": "asir2",
+            "test.fecha-entrada": {
+              $not: {
+                $gte: new Date(hoy),
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            "id-alumno": 1,
+            "Alumno.Nombre": 1,
+            "Alumno.ap1": 1,
+            "Alumno.ap2": 1,
+          },
+        },
+      ])
+      .then((response) => {
+        console.log(response);
+        for (i = 0; i < response.length; i++) {
+          asist
+            .create({
+              "id-alumno": response[i]._id,
+              "fecha-entrada": new Date(),
+              "fecha-salida": new Date(),
+              misterio: true,
+            })
+            .then((doc) => console.log(doc));
+        }22
+      });
+})
 mongoose
   .connect(
-    "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority", {
+    "mongodb+srv://jon:Almi123@cluster0.oo9o1.mongodb.net/controlAsistencias?retryWrites=true&w=majority",
+    {
       useNewUrlParser: true,
       useFindAndModify: true,
       useUnifiedTopology: true,
@@ -36,37 +86,44 @@ const mfrc522 = new Mfrc522(softSPI).setResetPin(22).setBuzzerPin(18);
 
 //Al leer los datos
 function checkUser(id) {
-  var fechaActual = moment().utc(new Date().toLocaleString()).tz("Europe/bucharest").format();
-  alumnos.find({
-      "id-barik": id
+  //let fechaActual = new Date().toLocaleString('es-ES', {timeZone: 'Europe/Madrid'})
+  let fecha = new Date().toLocaleString('es-ES', {timeZone: 'Europe/Madrid'})
+  let dividirFecha = fecha.split(' ');
+  let añomesdia = dividirFecha[0].split('/')
+  let horaMinutoSegundo = dividirFecha[1].split(':')
+  let fechaActual = new Date(añomesdia[2],añomesdia[1]-1,añomesdia[0],horaMinutoSegundo[0],horaMinutoSegundo[1],horaMinutoSegundo[2])
+  alumnos
+    .find({
+      "id-barik": id,
     })
-    .then(doc => {
+    .then((doc) => {
       if (doc.length == 0) {
         console.log("no se a encontrado al alumno" + "  " + id);
       } else {
-        var today = new Date();
-        var hoy = today.toISOString().split("T")[0];
-        const existe = asist.aggregate([{
-          $match: {
-            "id-alumno": doc[0]._id,
-            "fecha-entrada": {
-              $gte: new Date(hoy)
-            },
-          },
-        }, ]);
-        existe.exec(function (err, datos) {
-          if (datos.length > 0) {
-            asist.findOneAndUpdate({
+        let today = new Date();
+        let hoy = today.toISOString().split("T")[0];
+        let existe = asist.aggregate([
+          {
+            $match: {
               "id-alumno": doc[0]._id,
               "fecha-entrada": {
-                $gte: new Date(hoy)
+                $gte: new Date(hoy),
               },
-            }, {
-              "fecha-salida": fechaActual,
-              misterio: false
-            }).then(doc => {
-              console.log(doc)
-            })
+            },
+          },
+        ]);
+        existe.exec(function(err, datos) {
+          if (datos.length > 0) {
+            asist
+              .findOneAndUpdate(
+                {
+                  "fecha-salida": fechaActual,
+                  misterio: false,
+                }
+              )
+              .then((doc) => {
+                console.log(doc);
+              });
           } else {
             console.log("No existe");
             asist.create({

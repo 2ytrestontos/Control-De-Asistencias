@@ -5,8 +5,8 @@ import router from "../router";
 export default createStore({
   state: {
     sesion: localStorage.nombre,
-    ruta: "ruffuss.duckdns.org",
-    // ruta: "192.168.1.72",
+    //ruta: "ruffuss.duckdns.org",
+    ruta: "192.168.1.72",
     tipo: localStorage.tipo,
     tutoria: localStorage.tutoria
   },
