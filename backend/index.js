@@ -8,6 +8,8 @@ const alumnos = require("../backend/models/alumnos");
 const asist = require("../backend/models/asistencias");
 const moment = require("moment-timezone");
 const asistencias = require("../backend/models/asistencias");
+const cron = require('node-cron');
+
 const softSPI = new SoftSPI({
   clock: 23, // pin number of SCLK
   mosi: 19, // pin number of MOSI
