@@ -53,7 +53,6 @@
                     "/asistencias/" + response.data.usuario[0]._id
                   );
                 }
-                console.log(response.data);
                 localStorage.nombre = response.data.usuario[0].Nombre;
                 localStorage.id = response.data.usuario[0]._id;
                 localStorage.tipo = response.data.tipo;
