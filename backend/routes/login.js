@@ -3,6 +3,20 @@ const router = express.Router();
 const Usuarios = require("../models/usuarios");
 const Alumno = require('../models/alumnos');
 const crypto = require("crypto");
+const mongoose = require("mongoose")
+router.get("/:id", async (req, res) => {
+  Usuarios.aggregate([
+    {
+      $match: {
+        '_id': new mongoose.Types.ObjectId(req.params.id)
+      }
+    }, {
+      $project: {
+        'tutoria': 1
+      }
+    }
+  ]).then(doc => { res.send(doc)})
+})
 
 router.post("/", async (req, res) => {
   const hash = crypto
@@ -11,9 +25,9 @@ router.post("/", async (req, res) => {
     .digest("hex");
 
   await Usuarios.find({
-      Nombre: req.body.usuario,
-      Pass: hash
-    })
+    Nombre: req.body.usuario,
+    Pass: hash
+  })
     .then(usu => {
       if (usu.length > 0) {
         res.send({
@@ -22,9 +36,9 @@ router.post("/", async (req, res) => {
         })
       } else {
         Alumno.find({
-            'Alumno.Nombre': req.body.usuario,
-            'Alumno.pass': hash
-          })
+          'Alumno.Nombre': req.body.usuario,
+          'Alumno.pass': hash
+        })
           .then(response => {
             if (response.length > 0) {
               res.send({

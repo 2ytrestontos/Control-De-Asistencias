@@ -4,6 +4,7 @@ const {
 } = mongoose;
 
 const Usuarios = new Schema({
+  '_id': Schema.Types.ObjectId,
   Nombre: String,
   Pass: String,
   tutoria: String,

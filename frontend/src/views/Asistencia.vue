@@ -1,7 +1,8 @@
 <template>
   <div v-if="$store.state.sesion">
-    <div class="row contenedor col m-0 mb-2" v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
-      <i class="fas fa-arrow-left col-0 ml-1 mt-2" style="font-size: 1.5rem" v-on:click="back()"></i>
+    <div class="contenedor col m-0 mb-2 row" v-bind:class="porc > 20 ? 'alert-danger' : 'alert-success'">
+      <i class="fas fa-arrow-left col-1 ml-1 mt-2" style="font-size: 1.5rem" v-on:click="back()" v-if="$store.state.tipo == 'Profesor'"></i>
+      <i v-else class=" col-1 ml-1 mt-2"></i>
       <h2 class="col">Asistencias - {{ nombre }}</h2>
     </div>
 
