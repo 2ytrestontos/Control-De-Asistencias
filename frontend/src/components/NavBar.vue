@@ -118,8 +118,9 @@ export default {
                       anio.data[1].curso.Nombre,
                     ],
                   };
+                  
                 }
-                this.estado = "cargado";
+                setTimeout(() => {this.estado = "cargado"},150);
               })
               .catch((error) => console.log(error));
           }
@@ -128,7 +129,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function () {
+      handler: function() {
         this.ruta = this.$route.path;
       },
     },

@@ -27,6 +27,7 @@
                 <!-- <label for="pass" class="col-form-label">Contraseña</label> -->
                 <label for="tutor">Tutor de: </label>
                 <select id="tutor" name="tutor" v-model="input.tut">
+                  <option>No Es Tutor</option>
                   <option v-for="anios in anios" :key="anios">
                     {{ anios }}
                   </option>
@@ -70,7 +71,7 @@
       <h2>Panel de Administracion:</h2>
       <br />
       <button class="btn btn-primary" data-toggle="modal" data-target="#Adduser">
-        Registrar Usuario
+        Registrar Profesor
       </button>
       &nbsp;
       <router-link to="/Cursos">
@@ -95,7 +96,7 @@
         input: {
           usuario: "",
           pass: "",
-          tut: "",
+          tut: "No Es Tutor",
         },
         datos: null,
         error: null,
