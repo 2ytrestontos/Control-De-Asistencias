@@ -66,24 +66,29 @@ router.delete("/", async (req, res) => {
     .catch((error) => console.log(error));
 });
 router.put("/", async (req, res) => {
+  console.log(req.body)
   const hash = crypto
     .createHash("sha512")
     .update(req.body.pass)
     .digest("hex");
-
-  Usuarios.findOneAndUpdate(
-    {
-      _id: req.body.id,
-    },
-    {
-      $set: {
-        Nombre: req.body.usuario,
-        Pass: hash,
+  Usuarios.updateMany({ tutoria: req.body.tut }, { $set: { tutoria: "" } })
+    .then(Usuarios.findOneAndUpdate(
+      {
+        _id: req.body.id,
       },
-    }
-  )
-    .then(res.send("Actualizado correctamente"))
-    .catch(res.send("error al actualizar"));
+      {
+        $set: {
+          Nombre: req.body.usuario,
+          Pass: hash,
+          tutoria: req.body.tut
+        },
+      }
+    )
+      .then(
+        res.send("Actualizado correctamente")
+      )
+      .catch(res.send("error al actualizar")))
+
 });
 
 module.exports = router;
